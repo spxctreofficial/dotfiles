@@ -1,0 +1,77 @@
+#!/bin/sh
+
+# sxhkdrc
+export SXHKD_SHELL="/bin/sh"
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+# Monitors
+
+MAIN_MONITOR=DP-4
+ALT_MONITOR=HDMI-4
+
+xrandr --delmode $ALT_MONITOR "1920x1080_72.00_rb2"
+xrandr --newmode "1920x1080_72.00_rb2"  160.85  1920 1928 1960 2000  1080 1103 1111 1117 +hsync -vsync
+xrandr --addmode $ALT_MONITOR  "1920x1080_72.00_rb2"
+
+xrandr --output DP-4 --mode 2560x1440 --pos 1920x0 --rotate normal --output HDMI-4 --mode 1920x1080_72.00_rb2 --pos 0x360 --rotate normal
+
+## we don't need this shit because vsync is handled by compositor
+# xrandr --output $MAIN_MONITOR --set TearFree false
+# xrandr --output $ALT_MONITOR --set TearFree false
+
+bspc monitor $MAIN_MONITOR -d 1 2 3 4 5 6 7 8 9
+bspc monitor $ALT_MONITOR -d 0
+
+feh --bg-fill ~/Pictures/rose-pine.jpg
+
+# I have no fucking clue
+bspc rule -r "*"
+
+# Launchers
+killall "nm-applet"
+nm-applet &
+
+## X11 woes
+xset -dpms
+setterm -blank 0 -powerdown 0
+
+xset s off
+xset r rate 200 72
+xsetroot -cursor_name left_ptr
+
+# xrdb ~/.config/bspwm/.Xresources
+xmodmap ~/.config/bspwm/.Xmodmap
+setxkbmap -option caps:none
+
+## IME
+killall ibus-daemon
+sleep 0.05
+ibus-daemon -rxRd
+
+## Status Bar
+killall polybar
+sleep 0.05
+polybar &
+
+## Compositor
+killall compfy
+compfy -b &
+
+
+# WM Config
+
+## Borders & Layout
+bspc config border_width 2
+bspc config window_gap 4
+
+bspc config split_ratio 0.5
+bspc config inital_poliarity second_child
+
+## Mouse Actions
+bspc config pointer_modifier super
+bspc config pointer_action1 move
+bspc config pointer_action2 resize_side
+bspc config pointer_action3 resize_corner
+bspc config focus_follows_pointer true
+bspc config pointer_follows_focus true
+bspc config pointer_motion_interval 1ms

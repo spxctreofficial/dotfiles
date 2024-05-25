@@ -1,0 +1,53 @@
+super + Shift_R
+    st
+super + w
+    firefox
+super + r
+    rofi -m DP-4 -disable-history -show run
+super + Return
+    rofi -m DP-4 -disable-history -show drun
+
+super + shift + s
+    ~/.config/sxhkd/scripts/maim.sh &
+super + v
+    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+
+super + space
+    ~/.config/sxhkd/scripts/ibus_cycle.sh &
+
+super + c
+    bspc node -c
+
+super + Escape
+	pkill -x sxhkd && sxhkd
+ctrl + alt Delete
+    pkill bspwm
+{super + shift + Delete,super + shift + c}
+    bspc wm -r; \
+    pkill -x sxhkd && sxhkd;
+
+
+super + { t, f, shift + f}
+    bspc node -t {tiled,floating,fullscreen}
+
+super + {_,alt + ,shift + }{h,j,k,l}
+	bspc node -{f,s,n} {west,south,north,east} --follow
+super + alt + u
+    bspc node @parent -R 90
+
+super + ctrl + {h,l}
+    bspc desktop -f {prev,next}.local
+
+super + ctrl + {j,k}
+    bspc node -d {prev,next}.local --follow
+
+super + m
+    bspc desktop -f next.!local
+super + shift + m
+    bspc node -d next.!local --follow
+
+alt + {_,Shift + }Tab
+    bspc node -f {next,prev}.local.!hidden.window
+
+super + {_,shift + }{1,2,3,4,5,6,7,8,9,0}
+	bspc {desktop -f,node -d} '^{2,3,4,5,6,7,8,9,10,1}' --follow
