@@ -13,7 +13,7 @@ xrandr --delmode $ALT_MONITOR "1920x1080_72.00_rb2"
 xrandr --newmode "1920x1080_72.00_rb2"  160.85  1920 1928 1960 2000  1080 1103 1111 1117 +hsync -vsync
 xrandr --addmode $ALT_MONITOR  "1920x1080_72.00_rb2"
 
-xrandr --output DP-4 --mode 2560x1440 --pos 1920x0 --rotate normal --output HDMI-4 --mode 1920x1080_72.00_rb2 --pos 0x360 --rotate normal
+xrandr --output DP-4 --mode 2560x1440 --pos 1920x0 --rotate normal --output HDMI-4 --mode 1920x1080 --pos 0x360 --rotate normal
 
 ## we don't need this shit because vsync is handled by compositor
 # xrandr --output $MAIN_MONITOR --set TearFree false
@@ -26,6 +26,22 @@ feh --bg-fill ~/Pictures/rose-pine.jpg
 
 # I have no fucking clue
 bspc rule -r "*"
+
+# Audio
+
+pactl unload-module module-null-sink
+pactl unload-module module-remap-sink
+pactl unload-module module-loopback
+
+pactl load-module module-null-sink media.class=Audio/Source/Virtual sink_name=input-ultimate channel_map=front-left,front-right sink_properties=device.description=input-ultimate
+pactl load-module module-remap-sink sink_name=output-ultimate master=alsa_output.pci-0000_00_1f.3.analog-stereo sink_properties=device.description=output-ultimate
+pactl load-module module-loopback sink_name=loopback-ultimate source=input-ultimate sink=alsa_output.pci-0000_00_1f.3.analog-stereo sink_properties=device.description=loopback-ultimate
+
+# sets the default volume (because arch linux likes to fuck around and find out)
+pactl set-sink-volume alsa_output.pci-0000_00_1f.3.analog-stereo 69%
+
+pactl set-default-sink output-ultimate
+pactl set-default-source input-ultimate
 
 # Launchers
 killall "nm-applet"

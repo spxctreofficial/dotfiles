@@ -12,9 +12,20 @@ export HYPRLAND_HEADERS="$HOME/repos/external/Hyprland"
 export XCURSOR_THEME=Simp1e-Rose-Pine-Moon
 export XCURSOR_SIZE=24
 
-# Path directories
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+
+# Cargo
 path+=($HOME'/.cargo/bin')
 
+eval "$(fnm env --use-on-cd --shell zsh)"
+
+# pnpm
+export PNPM_HOME="/home/spxctre/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
 # Aliases
 
@@ -39,7 +50,6 @@ alias rofl='rofi -disable-history -show drun'
 # alias neofetch='fastfetch'
 
 alias unfuckmem='free -h && sudo sysctl -w vm.drop_caches=3 && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && free -h'
-
 
 # zsh plugins
 source $OH_MY_ZSH/oh-my-zsh.sh
